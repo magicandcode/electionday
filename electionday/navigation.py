@@ -17,16 +17,21 @@ class Menu:
         self.selector_punctuation: str = str(selector_punctuation)
         self.left_padding = int(left_padding)
 
-    def show(self):
+    def __str__(self) -> str:
+        return self.get_output_string()
+
+    def get_output_string(self) -> str:
         left_padding_string: str = ' ' * self.left_padding
         if self.selectors:
-            print('\n'.join(
+            return '\n'.join(
                 f"{left_padding_string}{selector}{self.selector_punctuation}"
                 f"{' '*(self.selector_padding or 1)}{option}"
-                for option, selector in zip(self.options, self.selectors)))
-        else:
-            print('\n'.join(f'{left_padding_string}{option}'
-                            for option in self.options))
+                for option, selector in zip(self.options, self.selectors))
+        return '\n'.join(f'{left_padding_string}{option}'
+                         for option in self.options)
+
+    def show(self):
+        print(self.get_output_string())
 
 
 if __name__ == "__main__":
