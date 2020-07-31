@@ -1,3 +1,37 @@
+from typing import Callable
+
+
+def add_padding(padding: int, direction: str = 'both') -> Callable:
+    """Add padding on both or either side of a string using blank
+      spaces.
+
+    Args:
+        padding (int): Size of padding (number of blank spaces)
+        direction (str, optional): Which side to pad. Defaults to 'both'.
+
+    Returns:
+        Callable: Wrapper function taking the string to pad
+    """
+    direction = direction.lower()
+
+    def wrapper(string: str) -> str:
+        """Wrapper function, takes the string to pad as argument.
+
+        Args:
+            string (str): String to pad
+
+        Returns:
+            str: Padded string
+        """
+        if direction == 'left':
+            return ' '*padding  + string
+        elif direction == 'right':
+            return string + padding*' '
+        else:
+            return ' '*padding + string + ' '*padding
+    return wrapper
+
+
 class Menu:
 
     def __init__(self,
@@ -15,23 +49,33 @@ class Menu:
         self.selectors = [str(selector) for selector in selectors]
         self.selector_padding: int = abs(selector_padding) or 2
         self.selector_punctuation: str = str(selector_punctuation)
-        self.left_padding = int(left_padding)
+        self._left_padding = int(left_padding)
+        self.pad = add_padding(self.left_padding, 'left')
 
     def __str__(self) -> str:
-        return self.get_output_string()
-
-    def get_output_string(self) -> str:
-        left_padding_string: str = ' ' * self.left_padding
         if self.selectors:
             return '\n'.join(
-                f"{left_padding_string}{selector}{self.selector_punctuation}"
-                f"{' '*(self.selector_padding or 1)}{option}"
+                self.pad(f"{selector}{self.selector_punctuation}"
+                f"{' '*(self.selector_padding or 1)}{option}")
                 for option, selector in zip(self.options, self.selectors))
-        return '\n'.join(f'{left_padding_string}{option}'
+        return '\n'.join(self.pad(option)
                          for option in self.options)
 
-    def show(self):
-        print(self.get_output_string())
+    @property
+    def left_padding(self) -> int:
+        return self._left_padding
+
+    @left_padding.setter
+    def left_padding(self, value: int) -> None:
+        self._left_padding = int(value)
+        self.pad = add_padding(self.left_padding, 'left')
+
+    @property
+    def layout(self) -> str:
+        return str(self)
+
+    def view(self) -> None:
+        print(self.layout)
 
 
 if __name__ == "__main__":
@@ -39,4 +83,4 @@ if __name__ == "__main__":
         ['One', 'Two', 'Three'], [1, 2, 3, 4, 5, 6], selector_padding=0,
         selector_punctuation='.', left_margin=5)
     print(menu.options)
-    menu.show()
+    menu.view()
