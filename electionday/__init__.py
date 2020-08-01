@@ -2,6 +2,7 @@ from getpass import getpass
 import os
 import sys
 
+import click
 from colorama import Back, Fore, Style
 
 import electionday.config as config
@@ -11,10 +12,30 @@ import electionday.party as party_model
 import electionday.database as db
 
 
-def main():
-    menu = config.MENU
+# Use UI menu.
+menu = config.MENU
+
+
+@click.command()
+@click.option('-o', '--option', default='',
+              help=f'Menu option selector ('
+              f"{', '.join(selector for  selector in menu.selectors)})")
+@click.option('-n', '--name', default='', help='Name of voter')
+def main(option: str, name: str):
+    """Set up variables and run program loop.
+
+    Args:
+        option (str): Command line argument to shortcut menu selection
+        name (str): Command line argument to shortcut voter name
+
+    Raises:
+        Exception: Generic exception
+        KeyboardInterrupt: Exit program
+    """
     PASSWORD: str = config.PASSWORD
     error_msg: str = ''
+    selected_option: str = ''
+    user_name: str = ''
     try:
         while True:
             clear()
@@ -24,7 +45,10 @@ def main():
                 print(Fore.RED, pad(error_msg),Style.RESET_ALL, sep='',
                       end='\n\n')
                 error_msg = ''
-            selected_option: str = get_option()
+            if option:
+                selected_option = option
+            else:
+                selected_option = get_option()
             if selected_option not in menu.selectors:
                 error_msg = (f'Invalid selector ({selected_option}), please try'
                             ' again.')
@@ -35,7 +59,10 @@ def main():
 
             elif selected_option == '1':
                 # Prompt user for name and voter ID.
-                user_name: str = prompt('Name: ')
+                if not name:
+                    user_name = prompt('Name: ')
+                else:
+                    user_name = name
                 voter_id: str = getpass(pad('Voter ID: '))
 
                 # Validate user.
@@ -83,10 +110,13 @@ def main():
                 print(pad(f'Use password "{config.PASSWORD}" to access current'
                         ' results.'))
                 go_back()
+                option = ''
+                name = ''
 
             elif selected_option == '2':
-                # Prompt voter for password.
-                password = getpass(pad('Enter password to view results: '))
+                if not password:
+                    # Prompt voter for password.
+                    password = getpass(pad('Enter password to view results: '))
                 if password != PASSWORD:
                     error_msg = 'Invalid password.'
                     continue
@@ -109,6 +139,8 @@ def main():
                    print(pad('No votes'))
                 print()
                 go_back()
+                password = ''
+                option = ''
         exit_program()
     except Exception as e:
         print(repr(e))
@@ -117,23 +149,31 @@ def main():
         exit_program()
 
 
-pad = navigation.add_padding(padding=2, direction='left')
+def pad(string: str) -> str:
+    """Pad string with blank spaces.
+
+    Args:
+        string (str): String to pad
+
+    Returns:
+        str: Padded string
+    """
+    return navigation.add_padding(padding=2, direction='left')(string)
 
 
 def clear() -> None:
-    """Wrapper for os.system to clear previous output.
-    """
+    """Wrapper for os.system to clear previous output."""
     os.system('clear')
 
 
 def prompt(string: str) -> str:
-    """Wrapper for padded input.
+    """Wrapper for padded input prompt.
 
     Args:
-        string (str): Input prompt string
+        string (str): Input message
 
     Returns:
-        string (str): User input string
+        string (str): User input value
     """
     return input(pad(string))
 
@@ -141,11 +181,11 @@ def prompt(string: str) -> str:
 def go_back() -> None:
     """Prompt user to return to main menu.
 
-    Temporarily halts event loop to keep any previously output data
+    Temporarily halts program loop to keep any previously output data
       visible until user chooses to return to menu.
 
     Returns:
-        None: None
+        None
     """
     prompt('Back to main menu > ')
 
@@ -160,7 +200,7 @@ def get_option() -> str:
 
 
 def header(string: str) -> None:
-
+    """Wrapper function to print formatted header text."""
     print('\n', pad(string), sep='', end='\n\n')
 
 
@@ -168,6 +208,17 @@ def header(string: str) -> None:
 def cast_vote(cursor: db.sqlite3.Cursor,
               voter: voter_model.Voter,
               party: party_model.Party) -> None:
+    """Cast a vote by incrementing party votes by 1 and setting voter
+      has_voted attribute/value to True/1.
+
+    Args:
+        cursor (db.sqlite3.Cursor): Database connection cursor
+        voter (voter_model.Voter): Voter to vote
+        party (party_model.Party): Party to vote for
+
+    Raises:
+        Exception: Generic exception
+    """
     try:
         voter_model.vote(cursor, voter)
         party_model.add_vote(cursor, party)
@@ -175,7 +226,9 @@ def cast_vote(cursor: db.sqlite3.Cursor,
         print(repr(e))
         raise e
 
+
 def exit_program():
+    """Close database connection and exit program via sys.exit()."""
     print('\n\n', pad('Goodbye'), sep='', end='\n\n')
     db.CONNECTION.close()
     sys.exit()
