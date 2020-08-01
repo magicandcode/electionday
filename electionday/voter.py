@@ -62,7 +62,7 @@ def populate_table(cursor: sqlite3.Cursor, voters: Iterable):
         raise e
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def is_valid(cursor: sqlite3.Cursor, name: str, voter_id: str) -> bool:
 
     query: str = 'SELECT name FROM voters WHERE voter_id = ?'
@@ -73,7 +73,7 @@ def is_valid(cursor: sqlite3.Cursor, name: str, voter_id: str) -> bool:
         False
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def get_by_voter_id(cursor: sqlite3.Cursor, voter_id: str) -> Optional[Voter]:
 
     query: str = '''SELECT id, name, has_voted FROM voters WHERE voter_id = ?'''

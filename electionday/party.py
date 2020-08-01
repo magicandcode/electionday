@@ -74,7 +74,7 @@ def populate_table(cursor: sqlite3.Cursor, parties: Iterable):
         raise e
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def select_all(cursor: sqlite3.Cursor) -> Sequence[Party]:
 
     query: str = 'SELECT id, name, symbol, votes from parties ORDER BY name ASC'
@@ -85,7 +85,7 @@ def select_all(cursor: sqlite3.Cursor) -> Sequence[Party]:
     ]
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def select_results(cursor: sqlite3.Cursor) -> Sequence[Party]:
 
     query: str = '''SELECT id, name, symbol, votes from parties
@@ -104,7 +104,7 @@ def get_by_selector(parties: Sequence[Party], selector: str) -> optional[Party]:
     return None
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def select_winners(cursor: sqlite3.Cursor) -> Sequence[Party]:
 
     query: str = 'SELECT MAX(votes) FROM parties'
@@ -118,7 +118,7 @@ def select_winners(cursor: sqlite3.Cursor) -> Sequence[Party]:
     ]
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def get_by_id(cursor: sqlite3.Cursor, _id: int) -> Optional[Party]:
 
     query: str = 'SELECT id, name, symbol, votes FROM parties WHERE id = ?'

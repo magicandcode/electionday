@@ -114,9 +114,8 @@ def main(option: str, name: str):
                 name = ''
 
             elif selected_option == '2':
-                if not password:
-                    # Prompt voter for password.
-                    password = getpass(pad('Enter password to view results: '))
+                # Prompt voter for password.
+                password = getpass(pad('Enter password to view results: '))
                 if password != PASSWORD:
                     error_msg = 'Invalid password.'
                     continue
@@ -204,7 +203,7 @@ def header(string: str) -> None:
     print('\n', pad(string), sep='', end='\n\n')
 
 
-@db.connection_cursor
+@db.connect_with_cursor
 def cast_vote(cursor: db.sqlite3.Cursor,
               voter: voter_model.Voter,
               party: party_model.Party) -> None:

@@ -31,8 +31,8 @@ def connect(fn: Callable) -> Callable:
         fn (Callable): Decorated function
 
     Raises:
-        sqlite3.Error: SQLite exception
-        Exception: Generic exception
+        sqlite3.Error: Database exception
+        Exception: Generic Exception
 
     Returns:
         Callable: Decorator wrapper function
@@ -41,8 +41,8 @@ def connect(fn: Callable) -> Callable:
         """Decorator wrapper function.
 
         Raises:
-            sqlite3.Error: SQLite exception
-            Exception: Generic exception
+            sqlite3.Error: Database exception
+            Exception: Generic Exception
 
         Returns:
             Any: Query result, if any, or None
@@ -68,7 +68,7 @@ def connect(fn: Callable) -> Callable:
     return wrapper
 
 
-def connection_cursor(fn: Callable):
+def connect_with_cursor(fn: Callable):
     """Decorator to create and close connection while passing the
       connection cursor to the decorated function.
 
@@ -89,8 +89,8 @@ def connection_cursor(fn: Callable):
         """Decorator wrapper function.
 
         Raises:
-            sqlite3.Error: SQLite exception
-            Exception: Generic exception
+            sqlite3.Error: Database exception
+            Exception: Generic Exception
 
         Returns:
             Any: Query result, if any, or None
@@ -127,8 +127,8 @@ def create_tables(
         connection (sqlite3.Connection): [description]
 
     Raises:
-        e: [description]
-        e: [description]
+        sqlite3.Error: Database exception
+        Exception: Generic Exception
     """
     cursor: Optional[sqlite3.Cursor] = None
     try:
@@ -152,6 +152,9 @@ def load_data() -> None:
 
     Args:
         connection (sqlite3.Connection): Passed via decorator
+
+    Raises:
+        Exception: Generic Exception
     """
     # Get sample data.
     try:
@@ -165,14 +168,14 @@ def load_data() -> None:
 @connect
 def populate_tables(
     connection: sqlite3.Connection, *tables_data) -> None:
-    """[summary]
+    """Populate tables with initial data.
 
     Args:
-        connection (sqlite3.Connection): [description]
+        connection (sqlite3.Connection): Database connection
 
     Raises:
-        e: [description]
-        e: [description]
+        sqlite3.Error: Database exception
+        Exception: Generic Exception
     """
     cursor: Optional[sqlite3.Cursor] = None
     try:
