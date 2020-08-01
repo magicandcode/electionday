@@ -17,6 +17,9 @@ pip install -e .
 This will create the database and populate it with your data.
 
 ## Usage
+While you can run the aplication as a Python file (requires that you create and populate the database manually); `python electionday.py`,
+the preferred way is to install it with Pip and run as a commandline application.
+
 You can run the application with or without any options. Any option values will be reset inside the program loop after first iteration.
 
 ```
