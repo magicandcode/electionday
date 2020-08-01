@@ -22,15 +22,13 @@ menu = config.MENU
               f"{', '.join(selector for  selector in menu.selectors)})")
 @click.option('-n', '--name', default='', help='Name of voter')
 def main(option: str, name: str):
-    """Set up variables and run program loop.
+    """Python voting system prototype
 
-    Args:
-        option (str): Command line argument to shortcut menu selection
-        name (str): Command line argument to shortcut voter name
+    Login to vote on a party and view current results.
+    To vote you must be a registered voter and enter your name and voter ID.
 
-    Raises:
-        Exception: Generic exception
-        KeyboardInterrupt: Exit program
+    You can run the application with or without any options.
+    Any option values will be reset inside the program loop after first iteration.
     """
     PASSWORD: str = config.PASSWORD
     error_msg: str = ''
