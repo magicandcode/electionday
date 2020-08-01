@@ -1,5 +1,6 @@
 from getpass import getpass
 import os
+import shutil
 import sys
 
 import click
@@ -163,7 +164,11 @@ def pad(string: str) -> str:
 
 def clear() -> None:
     """Wrapper for os.system to clear previous output."""
-    os.system('clear')
+    command: str = 'clear'
+    if shutil.which(command) is None:
+        os.system('cls')
+    else:
+        os.system(command)
 
 
 def prompt(string: str) -> str:
