@@ -1,0 +1,14 @@
+{
+    "parties": [
+        "Azorius Senate", "Boros Legion", "Dimir House", "Rakdos Cult",
+        "Golgari Swarm", "Gruul Clans", "Izzet Leauge", "Orzhov Syndicate",
+        "Selesnya Conclave", "Simic Combine"
+    ],
+    "voters": [
+        ["1001", "Dovin"], ["1002", "Tajic"], ["1003", "Etrata"],
+        ["1004", "Judith"], ["1005", "Vraska"], ["1006", "Domri"],
+        ["1007", "Niv"], ["1008", "Teysa"], ["1009", "Emmara"],
+        ["1010", "Zegana"], ["1011", "Gideon"], ["1012", "Tassa"],
+        ["1013","Sorin" ], ["1014", "Chandra"], ["1015", "Nissa"]
+    ]
+}

@@ -75,7 +75,7 @@ class Menu:
         return str(self)
 
     def view(self) -> None:
-        print(self.layout)
+        print('', self.layout, sep='', end='\n\n')
 
 
 if __name__ == "__main__":
