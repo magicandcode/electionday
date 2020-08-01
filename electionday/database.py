@@ -40,6 +40,8 @@ def connect(fn: Callable) -> Callable:
     def wrapper(*args, **kwargs) -> Any:
         """Decorator wrapper function.
 
+        Using connection in a with block commits queries automatically.
+
         Raises:
             sqlite3.Error: Database exception
             Exception: Generic Exception
@@ -61,10 +63,6 @@ def connect(fn: Callable) -> Callable:
         except Exception as e:
             print(repr(e))
             raise e
-        # ?: No need to commit when using with block?
-        finally:
-            if connection:
-                connection.commit()
     return wrapper
 
 

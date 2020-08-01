@@ -52,6 +52,7 @@ def main(option: str, name: str):
             if selected_option not in menu.selectors:
                 error_msg = (f'Invalid selector ({selected_option}), please try'
                             ' again.')
+                option = ''
 
             elif selected_option == '3':
                 # Break out of loop to exit program.
@@ -68,12 +69,14 @@ def main(option: str, name: str):
                 # Validate user.
                 if not voter_model.is_valid(user_name, voter_id):
                     error_msg = 'Invalid credentials.'
+                    name = ''
                     continue
 
                 valid_voter = voter_model.get_by_voter_id(voter_id)
                 # Check if voter has voted.
                 if valid_voter.has_voted:
                     error_msg = 'You have already voted.'
+                    name = ''
                     continue
 
                 clear()
