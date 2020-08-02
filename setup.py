@@ -11,7 +11,7 @@ def custom_run(command_subclass):
 
     def modified_run(self):
         orig_run(self)
-        # Install database.
+        # Database setup after package installation.
         exec(open('setup_db.py').read(), globals())
     command_subclass.run = modified_run
     return command_subclass
