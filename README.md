@@ -12,7 +12,7 @@ Also rename `.sample-env` to `.env` and set `PASSWORD` required to view results.
 
 It is strongly recommended that you run the application in its own virtual environemnt.
 ### Setting up virtual environment
-#### Unix
+#### Unix (MacOS/Linux)
 You may have to use `python3` instead of `python`, check your Python version with `python -V` and `python3 -V` and use the latest version (see Requirements).
 ```
 python3 -m venv venv
