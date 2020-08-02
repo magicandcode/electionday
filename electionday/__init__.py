@@ -68,14 +68,14 @@ def main(option: str, name: str):
                 # Validate user.
                 if not voter_model.is_valid(user_name, voter_id):
                     error_msg = 'Invalid credentials.'
-                    name = ''
+                    name, option = '', ''
                     continue
 
                 valid_voter = voter_model.get_by_voter_id(voter_id)
                 # Check if voter has voted.
                 if valid_voter.has_voted:
                     error_msg = 'You have already voted.'
-                    name = ''
+                    name, option = '', ''
                     continue
 
                 clear()
@@ -97,8 +97,14 @@ def main(option: str, name: str):
                     if confirm_cancel:
                         break
                     selected_party = party_model.get_by_selector(parties, selector)
-                    if selected_party is None:
-                        print(pad('Invalid selection.'))
+                    if selector == 'c':
+                        # User has regretted cancelling and should be
+                        #   prompted to select a party without seeing
+                        #   invalid selection message.
+                        continue
+                    elif selected_party is None:
+                        print(Fore.RED, pad('Invalid selection.'), Style.RESET_ALL,
+                              sep='')
                         continue
                     print(pad(f'You have selected: {selected_party.name.upper()}'))
                     confirm_selection: bool = prompt('Confirm vote? Y/n ').lower()
@@ -111,15 +117,15 @@ def main(option: str, name: str):
                 print(pad('Thank you for voting!'))
                 print(pad(f'Use password "{config.PASSWORD}" to access current'
                         ' results.'))
+                name, option = '', ''
                 go_back()
-                option = ''
-                name = ''
 
             elif selected_option == '2':
                 # Prompt voter for password.
                 password = getpass(pad('Enter password to view results: '))
                 if password != PASSWORD:
                     error_msg = 'Invalid password.'
+                    option = ''
                     continue
                 clear()
 
@@ -192,7 +198,7 @@ def go_back() -> None:
     Returns:
         None
     """
-    prompt('Back to main menu > ')
+    prompt('Back to main menu >')
 
 
 def get_option() -> str:
