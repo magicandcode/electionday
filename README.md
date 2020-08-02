@@ -73,7 +73,7 @@ This will create the database and populate it with your data.
 
 
 ## Usage
-To run application as a Python script you need to install dependencies and create the database manually.
+To run the application as a Python script you need to install dependencies and create the database manually.
 Start by installing dependencies in `requirements.txt`:
 ```
 pip install -r requirements.txt

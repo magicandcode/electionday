@@ -116,7 +116,7 @@ def main(option: str, name: str):
                 cast_vote(voter=valid_voter, party=selected_party)
                 print(pad('Thank you for voting!'))
                 print(pad(f'Use password "{config.PASSWORD}" to access current'
-                        ' results.'))
+                        ' results.'), end='\n\n')
                 name, option = '', ''
                 go_back()
 
