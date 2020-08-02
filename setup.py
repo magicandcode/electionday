@@ -35,7 +35,7 @@ with open('./requirements.txt', 'r', encoding='utf-8') as f:
 setup(
     name=APP_NAME,
     py_modules=[APP_SLUG],
-
+    cmdclass={'install': CustomInstallCommand, 'develop': CustomDevelopCommand}
     install_requires=requirements,
     entry_points=f'''
         [console_scripts]
