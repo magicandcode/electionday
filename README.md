@@ -1,18 +1,20 @@
-## ElectionDay
+# ElectionDay
 ### Simple (and insecure!) Python voting system prototype application.
 
 Final project submission.
 
 Login to vote on a party and view current results. To vote you must be a registered voter and enter your name and voter ID.
 
+
 ## Installation
 First you need to rename `data/sample-data.json` to `data.json` (or change the path in `electionday/config.py`).
 
 Also rename `.sample-env` to `.env` and set `PASSWORD` required to view results.
 
-It is strongly recommended that you run the application in its own virtual environemnt.
-### Setting up virtual environment
-#### Unix (MacOS/Linux)
+It is strongly recommended that you run the application in its own virtual environment.
+
+
+### Virtual Environment - Unix (MacOS/Linux)
 You may have to use `python3` instead of `python`, check your Python version with `python -V` and `python3 -V` and use the latest version (see Requirements).
 ```
 python3 -m venv venv
@@ -31,24 +33,27 @@ pip install -e .
 Note that you need to be inside the project repo root dir.
 This will create the database and populate it with your data.
 
-#### Windows
+
+### Virtual Environment - Windows
 Create virtual environment:
 ```
 python -m venv venv
 ```
-> If you get an error saying you don't have permission, make sure there is no `venv` dir already. This error seems to occur even if you've removed a previour virtual environemnt dir so update the Explorer window and make sure `.\venv` doesn't exist before you start searching for another solution.
+> If you get an error saying you don't have permission, make sure there is no `venv` dir already. This error may occur even if you've removed a previous virtual environemnt directory so update the Explorer window or run `dir` to make sure `venv` doesn't exist before you start searching for another solution.
 
 Once you've created your virtual environment you need to activate it. Depending on which shell you're using the command differs slightly.
+
 #### Cmd
 ```
-.\venv\Scripts\activate.bat
+venv\Scripts\activate.bat
 ```
+
 #### Powershell
 ```
-.\venv\Scripts\activate.ps1
+venv\Scripts\activate.ps1
 ```
 You should now see `(venv)` in the prompt.
-Once you've activated your virtual environemnt you install the application and its
+Once you've activated your virtual environment you install the application and its
 dependencies using Pip:
 ```
 pip install -e .
@@ -58,11 +63,35 @@ This will create the database and populate it with your data.
 
 > If you encounter an error with `null character` or `encoding` in the message you may need to change the value of `ENCODING` in `electionday/config.py`.
 
-## Usage
-While you can run the aplication as a Python file (requires that you create and populate the database manually); `python electionday.py`,
-the preferred way is to install it with Pip and run as a commandline application.
+> If there are any import issues, try running pip or a Python script as a Python module:
+> ```
+> python -m pip <options>
+> ```
+> ```
+> python -m module_name_without_dot_py
+> ```
 
-You can run the application with or without any options. Any option values will be reset inside the program loop after first iteration.
+
+## Usage
+To run application as a Python script you need to install dependencies and create the database manually.
+Start by installing dependencies in `requirements.txt`:
+```
+pip install -r requirements.txt
+```
+
+Then create and populate the database:
+```
+python -m setup_db
+```
+
+Finally run the application as a script (cannot be run as a module since it has the same name as the package):
+```
+python electionday.py
+```
+
+While it's possible to run the application as a script, the preferred way is to install it with Pip and run as a commandline application.
+
+You can run the application with or without any options. Any command line option values will be reset inside the program loop after the first iteration.
 
 ```
 Usage: electionday [OPTIONS]
