@@ -56,7 +56,7 @@ pip install -e .
 Note that you need to be inside the project repo root dir.
 This will create the database and populate it with your data.
 
-> If you encounter a ``TypeError` with `null character` in the message you may need to change the value of `ENCODING` in `electionday/config.py`.
+> If you encounter an error with `null character` or `encoding` in the message you may need to change the value of `ENCODING` in `electionday/config.py`.
 
 ## Usage
 While you can run the aplication as a Python file (requires that you create and populate the database manually); `python electionday.py`,
