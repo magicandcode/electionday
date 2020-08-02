@@ -1,36 +1,48 @@
+import os
 from setuptools import setup
-
-from electionday.config import APP_NAME, APP_SLUG
-import electionday.database as db
-from electionday.party import (
-    create_table as party_table,
-    populate_table as party_data
-)
-from electionday.voter import (
-    create_table as voter_table,
-    populate_table as voter_data
-)
+from setuptools.command.develop import develop
+from setuptools.command.install import install
 
 
-db.create_tables(party_table, voter_table)
-try:
-    data = db.load_data()
-    parties, voters = data['parties'], data['voters']
-except Exception as e:
-    print(repr(e))
-    raise e
-else:
-    db.populate_tables((party_data, parties), (voter_data, voters))
-    print('Successfully created and populated database tables.')
+def custom_run(command_subclass):
+    """A decorator for classes subclassing one of the setuptools commands.
+    """
+    orig_run = command_subclass.run
+
+    def modified_run(self):
+        orig_run(self)
+        # Install database.
+        exec(open('setup_db.py').read(), globals())
+    command_subclass.run = modified_run
+    return command_subclass
+
+
+@custom_run
+class CustomDevelopCommand(develop):
+    pass
+
+@custom_run
+class CustomInstallCommand(install):
+    pass
+
+
+APP_NAME, APP_SLUG = 'ElectionDay', 'electionday'
 
 with open('./requirements.txt', 'r', encoding='utf-8') as f:
     requirements = [req.strip() for req in f]
 
+with open('./requirements-dev.txt', 'r', encoding='utf-8') as f:
+    requirements_dev = [req.strip() for req in f]
+
 setup(
     name=APP_NAME,
     py_modules=[APP_SLUG],
-
+    cmdclass={
+        'install': CustomInstallCommand,
+        'develop': CustomDevelopCommand,
+    },
     install_requires=requirements,
+    develop_requires=requirements_dev,
     entry_points=f'''
         [console_scripts]
         {APP_SLUG}={APP_SLUG}:main
