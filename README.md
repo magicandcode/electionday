@@ -143,6 +143,7 @@ Options:
   Confirm vote? Y/n y
   Thank you for voting!
   Use password "ivoted" to access current results.
+
   Back to main menu >
   ```
 
