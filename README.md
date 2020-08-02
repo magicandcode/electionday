@@ -6,15 +6,57 @@ Final project submission.
 Login to vote on a party and view current results. To vote you must be a registered voter and enter your name and voter ID.
 
 ## Installation
-First you need to rename `data/sample-data.json` to `data.json` (or change the path in `setup.py`).
+First you need to rename `data/sample-data.json` to `data.json` (or change the path in `electionday/config.py`).
 
 Also rename `.sample-env` to `.env` and set `PASSWORD` required to view results.
 
-Install with Pip when in project folder (`ElectionDay`):
+It is strongly recommended that you run the application in its own virtual environemnt.
+### Setting up virtual environment
+#### Unix
+You may have to use `python3` instead of `python`, check your Python version with `python -V` and `python3 -V` and use the latest version (see Requirements).
+```
+python3 -m venv venv
+```
+This creates a virtual environment in a new dir `venv/` inside the project repo. It will not be tracked by Git.
+Activate the environment:
+```
+. venv/bin/activate
+```
+You should now see `(venv)` in the prompt.
+Once you've activated your virtual environemnt you install the application and its
+dependencies using Pip:
 ```
 pip install -e .
 ```
+Note that you need to be inside the project repo root dir.
 This will create the database and populate it with your data.
+
+#### Windows
+Create virtual environment:
+```
+python -m venv venv
+```
+> If you get an error saying you don't have permission, make sure there is no `venv` dir already. This error seems to occur even if you've removed a previour virtual environemnt dir so update the Explorer window and make sure `.\venv` doesn't exist before you start searching for another solution.
+
+Once you've created your virtual environment you need to activate it. Depending on which shell you're using the command differs slightly.
+#### Cmd
+```
+.\venv\Scripts\activate.bat
+```
+#### Powershell
+```
+.\venv\Scripts\activate.ps1
+```
+You should now see `(venv)` in the prompt.
+Once you've activated your virtual environemnt you install the application and its
+dependencies using Pip:
+```
+pip install -e .
+```
+Note that you need to be inside the project repo root dir.
+This will create the database and populate it with your data.
+
+> If you encounter a ``TypeError` with `null character` in the message you may need to change the value of `ENCODING` in `electionday/config.py`.
 
 ## Usage
 While you can run the aplication as a Python file (requires that you create and populate the database manually); `python electionday.py`,
@@ -72,7 +114,7 @@ Options:
   Confirm vote? Y/n y
   Thank you for voting!
   Use password "ivoted" to access current results.
-  Back to main menu > 
+  Back to main menu >
   ```
 
 ### Results Screen
